@@ -9,9 +9,9 @@ const PropertySchema = new mongoose.Schema({
     status: {type: String, required: true},
     beds: {type: Number, required: true},
     baths: {type: Number, required: true},
-    sqft: {type: Number, required: true},
+    sqft: {type: String, required: true},
 })
 
-const propertyModel = mongoose.model('properties', PropertySchema);
+const PropertyModel = mongoose.model('properties', PropertySchema);
 
-module.exports = {propertyModel}
+module.exports = {PropertyModel}

@@ -1,7 +1,7 @@
-const { propertyModel } = require('../models/property.js');
+const { PropertyModel } = require('../models/property.js');
 
 const getPropertyById = async (req, res) => {
-    const properties = await propertyModel.findOne({ _id: req.params.id });
+    const properties = await PropertyModel.findOne({ _id: req.params.id });
     if (!properties) {
         res.status(404).send('No properties found');
         return;
@@ -14,7 +14,7 @@ const getPropertyById = async (req, res) => {
 };
 
 const getAllProperties = async (req, res) => {
-    const properties = await propertyModel.find();
+    const properties = await PropertyModel.find();
 
     if (!properties) {
         res.status(404).send("No properties found");
@@ -26,13 +26,12 @@ const getAllProperties = async (req, res) => {
         return;
     }
     res.status(200).json({
-        message: `Found on database ${properties.length} properties! `,
         properties: properties
     });
 };
 
 const getPropertiesByName = async (req, res) => {
-    const properties = await propertyModel.find({ title: req.params.name});
+    const properties = await PropertyModel.find({ title: req.params.name});
     
     if (!properties) {
         res.status(404).send('No properties found with this name');
@@ -46,8 +45,8 @@ const getPropertiesByName = async (req, res) => {
 };
 
 const getPropertyByKeyword = async (req, res) => {
-    const properties = await propertyModel.find({ 'regex': req.params.q });
-
+    const properties = await PropertyModel.find({title:{'$regex': req.params.q, "$options": "i"}});
+    
     if (!properties) {
         res.status(404).send('No properties found on database');
         return;
@@ -63,7 +62,8 @@ const getPropertyByKeyword = async (req, res) => {
 };
 
 const updateProperty = async (req, res) => {
-    const updatedProperty = await propertyModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedProperty = await PropertyModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    console.log(updatedProperty)
     if (!updatedProperty) {
         res.status(404).send('No properties found');
         return;
@@ -115,7 +115,7 @@ const addProperty = async (req, res) => {
         return;
     }
 
-    const newProperty = new propertyModel({ image, title, description, address, price, status, beds, baths, sqft });
+    const newProperty = new PropertyModel({ image, title, description, address, price, status, beds, baths, sqft });
 
     try {
         const savedProperty = await newProperty.save();
@@ -132,7 +132,7 @@ const addProperty = async (req, res) => {
 };
 
 const deleteProperty = async (req, res) => {
-    const deleteProperty = await propertyModel.findByIdAndDelete(req.params.id);
+    const deleteProperty = await PropertyModel.findByIdAndDelete(req.params.id);
     if (!deleteProperty) {
         res.status(404).send('No properties found');
         return;
