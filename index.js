@@ -6,9 +6,7 @@ const morgan = require('morgan');
 const dbCred = require('./cred.js');
 const propertyRouter = require('./routes/property-routes.js');
 
-
-const connectionString = `mongodb+srv://${dbCred.dbUser}:${dbCred.dbPassword}@cluster0.o7mda2q.mongodb.net/realestate?retryWrites=true&w=majority&appName=Cluster0`;
-
+const connectionString = process.env.MONGODB_URI
 const app = express();
 app.use(cors());
 app.use(express.json());
